@@ -53,18 +53,18 @@ variables:
       source: Valid_PAMHD0000.asdf
       datatype: float64
       byteorder: little
-      shape: [302, 302]
+      shape: [91204]
       offset: 64
-      strides: [43488, 144]
+      strides: [144]
   by:
     attributes: {actual_max: 0.0, actual_min: 0.0, unit: T}
     data: !core/ndarray-1.0.0
       source: Valid_PAMHD0000.asdf
       datatype: float64
       byteorder: little
-      shape: [302, 302]
+      shape: [91204]
       offset: 72
-      strides: [43488, 144]
+      strides: [144]
   bz:
     attributes: {actual_max: 0.10345241185964488, actual_min: 0.0067399661813076373,
       unit: T}
@@ -72,9 +72,9 @@ variables:
       source: Valid_PAMHD0000.asdf
       datatype: float64
       byteorder: little
-      shape: [302, 302]
+      shape: [91204]
       offset: 80
-      strides: [43488, 144]
+      strides: [144]
   c0:
     attributes: {actual_max: 1.0033333333333332, actual_min: -1.0033333333333332,
       unit: m}
@@ -235,27 +235,27 @@ variables:
       source: Valid_PAMHD0000.asdf
       datatype: int64
       byteorder: little
-      shape: [302, 302]
+      shape: [91204]
       offset: 136
-      strides: [43488, 144]
+      strides: [144]
   cell_type:
     attributes: {actual_max: 3, actual_min: 0, unit: '1'}
     data: !core/ndarray-1.0.0
       source: Valid_PAMHD0000.asdf
       datatype: int64
       byteorder: little
-      shape: [302, 302]
+      shape: [91204]
       offset: 112
-      strides: [43488, 144]
+      strides: [144]
   electric_resistivity:
     attributes: {actual_max: 0.0, actual_min: 0.0, unit: ohm-m}
     data: !core/ndarray-1.0.0
       source: Valid_PAMHD0000.asdf
       datatype: float64
       byteorder: little
-      shape: [302, 302]
+      shape: [91204]
       offset: 128
-      strides: [43488, 144]
+      strides: [144]
   jx:
     attributes: {actual_max: 4.3016063019743509, actual_min: -4.2667906540308458,
       unit: A}
@@ -263,9 +263,9 @@ variables:
       source: Valid_PAMHD0000.asdf
       datatype: float64
       byteorder: little
-      shape: [302, 302]
+      shape: [91204]
       offset: 88
-      strides: [43488, 144]
+      strides: [144]
   jy:
     attributes: {actual_max: 4.2409720473721286, actual_min: -4.3018452867664898,
       unit: A}
@@ -273,18 +273,18 @@ variables:
       source: Valid_PAMHD0000.asdf
       datatype: float64
       byteorder: little
-      shape: [302, 302]
+      shape: [91204]
       offset: 96
-      strides: [43488, 144]
+      strides: [144]
   jz:
     attributes: {actual_max: 0.0, actual_min: 0.0, unit: A}
     data: !core/ndarray-1.0.0
       source: Valid_PAMHD0000.asdf
       datatype: float64
       byteorder: little
-      shape: [302, 302]
+      shape: [91204]
       offset: 104
-      strides: [43488, 144]
+      strides: [144]
   mass_density:
     attributes: {actual_max: 1.0345241185964487, actual_min: 0.067399661813076384,
       unit: kg/m^3}
@@ -292,47 +292,47 @@ variables:
       source: Valid_PAMHD0000.asdf
       datatype: float64
       byteorder: little
-      shape: [302, 302]
+      shape: [91204]
       offset: 24
-      strides: [43488, 144]
+      strides: [144]
   mpi_rank:
     attributes: {actual_max: 9, actual_min: 0, unit: '1'}
     data: !core/ndarray-1.0.0
       source: Valid_PAMHD0000.asdf
       datatype: int64
       byteorder: little
-      shape: [302, 302]
+      shape: [91204]
       offset: 120
-      strides: [43488, 144]
+      strides: [144]
   px:
     attributes: {actual_max: 1.5923243882462057, actual_min: -0.99948011433969963,
-      unit: kg*m/s}
+      unit: kg-m/s}
     data: !core/ndarray-1.0.0
       source: Valid_PAMHD0000.asdf
       datatype: float64
       byteorder: little
-      shape: [302, 302]
+      shape: [91204]
       offset: 32
-      strides: [43488, 144]
+      strides: [144]
   py:
     attributes: {actual_max: 0.99948011433969952, actual_min: -1.6538530041390573,
-      unit: kg*m/s}
+      unit: kg-m/s}
     data: !core/ndarray-1.0.0
       source: Valid_PAMHD0000.asdf
       datatype: float64
       byteorder: little
-      shape: [302, 302]
+      shape: [91204]
       offset: 40
-      strides: [43488, 144]
+      strides: [144]
   pz:
     attributes: {actual_max: 0.0, actual_min: 0.0, unit: kg-m/s}
     data: !core/ndarray-1.0.0
       source: Valid_PAMHD0000.asdf
       datatype: float64
       byteorder: little
-      shape: [302, 302]
+      shape: [91204]
       offset: 48
-      strides: [43488, 144]
+      strides: [144]
   total_energy_density:
     attributes: {actual_max: 3.5050000001499999, actual_min: 0.19110062633134045,
       unit: J/m^3}
@@ -340,7 +340,7 @@ variables:
       source: Valid_PAMHD0000.asdf
       datatype: float64
       byteorder: little
-      shape: [302, 302]
+      shape: [91204]
       offset: 56
-      strides: [43488, 144]
+      strides: [144]
 ...

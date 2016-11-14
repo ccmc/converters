@@ -3,14 +3,12 @@ import asdf
 import sys, argparse
 import numpy as np
 
-print 'hello world'
-print asdf.__version__
 
 def main(argv):
 	parser = argparse.ArgumentParser(description="Interpolates variables onto grid.")
 	parser.add_argument("-v", "--verbose", action="count", default=0, help = 'verbosity of output')
 	parser.add_argument("input_file", metavar = 'full/path/to/input_file.dc', type=str, help="PAMHD raw output file")
-	parser.add_argument("-output_file", metavar = 'path/to/output_file.asdf', default =None)
+	parser.add_argument("-output_file", metavar = 'path/to/output_file.asdf', default = None)
 	parser.add_argument("-ginfo","--global-info", action='store_true', help = 'print global attributes')
 	parser.add_argument("-db", "--debug", default = False, help = 'debugging flag')
 	# include version argument
@@ -19,22 +17,31 @@ def main(argv):
 
 	args = parser.parse_args()
 
+	if args.verbose:
+		print "Using asdf version", asdf.__version__ 
+
 
 	if args.output_file is None:
 		filename = args.input_file + '.asdf'
+	else:
+		filename = args.output_file
 
-	print args.input_file, args.output_file
+	if args.verbose:
+		print "input file:", args.input_file
+		print "output file:", filename
 
 
 	mhd_dict = {}
-
-	# input_file = "/Users/apembrok/Work/RoR_Sample_Data/PAMHD/ilja_honkonen_20160406_LP_2/mhd_9.504e-01_s.dc"
 
 	sim_params = PAMHD.load(args.input_file, mhd_dict)
 
 	global_attributes = dict(sim_params._asdict())
 
 	global_attributes['model_name'] = 'PAMHD'
+
+	if args.global_info:
+		for attr in global_attributes:
+			print global_attributes[attr]
 
 
 	mhd_array = get_mhd_array(mhd_dict)
@@ -65,7 +72,7 @@ def main(argv):
 	tree_data['variables'] = variables
 
 
-	write_to(tree_data, components, variables, filename)
+	write_to(tree_data, components, variables, filename, verbose = args.verbose)
 
 	
 def get_coordinates():
@@ -110,7 +117,7 @@ def get_fields():
 	             )
 
 
-def write_to(tree_data,components, variables, filename):
+def write_to(tree_data,components, variables, filename, verbose = False):
 	print 'writing to', filename
 	ff = asdf.AsdfFile(tree_data)
 
