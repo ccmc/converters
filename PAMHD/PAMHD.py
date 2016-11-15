@@ -94,8 +94,6 @@ Every call appends only one tuple to each key, i.e. if called
 on an empty dictionary every list will have only one tuple.
 '''
 
-
-
 def load(file_name, mhd_data):
 	SimParams = namedtuple('SimParams',['time', 'adiabatic_index', 'proton_mass', 'vacuum_permeability'])
 
@@ -118,29 +116,17 @@ def load(file_name, mhd_data):
 		raise Exception('Given file name (' + file_name + ') is not a file.')
 
 	# infile = open(file_name, 'rb')
-	with open(file_name, 'rb') as infile: #will close safely and automatically	
-		def read_from_buffer(buffer_string, dtype, count = 1, offset = 0):
-			dtype = numpy.dtype(dtype)
-			data = numpy.frombuffer(buffer_string, dtype = dtype, count = count, offset = offset)
-			offset += dtype.itemsize
-			return data, offset
-
+	with open(file_name, 'rb') as infile: #will close safely and automatically
 
 		# read simulation header, given by source/mhd/save.hpp
-		buffer_string = infile.read() #switch to reading from buffer
-
-		file_version, file_offset = read_from_buffer(buffer_string, dtype='uint64', count = 1, offset = 0)
+		file_version = numpy.fromfile(infile, dtype = 'uint64', count = 1)
 		if file_version > 1:
 			print('Warning file version is newer than expected...')
-
-		
-		sim_params, file_offset = read_from_buffer(buffer_string, dtype='4double', count = 1, offset = file_offset)
+		sim_params = numpy.fromfile(infile, dtype = '4double', count = 1)
 
 		# from this point onward format is given by dccrg's save_grid_data()
 		# check file endiannes
-		
-		[endianness], file_offset = read_from_buffer(buffer_string, dtype = 'uint64', count = 1, offset = file_offset)
-
+		endianness = numpy.fromfile(infile, dtype = 'uint64', count = 1)[0]
 		if endianness != numpy.uint64(0x1234567890abcdef):
 			# should swap endiannes here
 			raise Exception(
@@ -149,45 +135,41 @@ def load(file_name, mhd_data):
 			)
 
 		# number of refinement level 0 cells in each dimension
-		[ref_lvl_0_cells], file_offset = read_from_buffer(buffer_string, dtype = '3uint64', count = 1, offset = file_offset)
-		# print 'ref_lvl_0_cells', ref_lvl_0_cells
+		ref_lvl_0_cells = numpy.fromfile(infile, dtype = '3uint64', count = 1)[0]
+		#print(ref_lvl_0_cells)
 
 		# maximum refinement level of grid cells
-		# max_ref_lvl = numpy.frombuffer(buffer_string, dtype = 'intc', count = 1)[0]
-		[max_ref_lvl], file_offset = read_from_buffer(buffer_string, dtype = 'intc', count = 1, offset = file_offset)
+		max_ref_lvl = numpy.fromfile(infile, dtype = 'intc', count = 1)[0]
 		if max_ref_lvl > numpy.uint32(0):
 			raise Exception('Refinement level > 0 not supported')
 
 		# length of every cells' neighborhood in cells of identical size
-		[neighborhood_length], file_offset = read_from_buffer(buffer_string, dtype = 'uintc', count = 1, offset = file_offset)
-		# print 'neighborhood_length', neighborhood_length
-
+		neighborhood_length = numpy.fromfile(infile, dtype = 'uintc', count = 1)[0]
+		#print(neighborhood_length)
 
 		# whether grid is periodic each dimension (0 == no, 1 == yes)
-		# periodicity = numpy.frombuffer(buffer_string, dtype = '3uint8', count = 1)[0]
-		[periodicity], file_offset = read_from_buffer(buffer_string, dtype = '3uint8', count = 1, offset = file_offset)
-		# print 'periodicity', periodicity
+		periodicity = numpy.fromfile(infile, dtype = '3uint8', count = 1)[0]
+		#print(periodicity)
 
-		[geometry_id], file_offset = read_from_buffer(buffer_string, dtype = 'intc', count = 1, offset = file_offset)
-		# print 'geometry_id', geometry_id
+		geometry_id = numpy.fromfile(infile, dtype = 'intc', count = 1)[0]
 		if geometry_id != numpy.int32(1):
 			raise Exception('Unsupported geometry')
 
 		# starting coordinate of grid
-		[grid_start], file_offset = read_from_buffer(buffer_string, dtype = '3double', count = 1, offset = file_offset)
-		# print 'grid_start', grid_start
+		grid_start = numpy.fromfile(infile, dtype = '3double', count = 1)[0]
+		#print(grid_start)
 
 		# length of cells of refinement level 0
-		[lvl_0_cell_length], file_offset = read_from_buffer(buffer_string, dtype = '3double', count = 1, offset = file_offset)
-		# print 'lvl_0_cell_length', lvl_0_cell_length
+		lvl_0_cell_length = numpy.fromfile(infile, dtype = '3double', count = 1)[0]
+		#print(lvl_0_cell_length)
 
 		# total number of cells in grid
-		[total_cells], file_offset = read_from_buffer(buffer_string, dtype = 'uint64', count = 1, offset = file_offset)
-		# print total_cells
+		total_cells = numpy.fromfile(infile, dtype = 'uint64', count = 1)[0]
+		#print(total_cells)
 
 		# id of each cell and offset in bytes to data of each cell
-		cell_ids_data_offsets, file_offset =  read_from_buffer(buffer_string, dtype = '2uint64', count = total_cells, offset = file_offset)
-		# print cell_ids_data_offsets
+		cell_ids_data_offsets = numpy.fromfile(infile, dtype = '2uint64', count = total_cells)
+		#print(cell_ids_data_offsets)
 
 		# until this point format decided by dccrg
 		# from this point onward format decided by save() call of tests/mhd/test.cpp
@@ -212,15 +194,12 @@ def load(file_name, mhd_data):
 			)
 			cell_id += 1
 
-			# infile.seek(item[1], 0)
-			# temp = numpy.frombuffer(buffer_string,
-			# 	dtype = 'double, 3double, double, 3double, 3double, intc, intc, double',
-			# 	count = 1
-			# )[0]
-			[temp], file_offset = read_from_buffer(buffer_string, 
+			infile.seek(item[1], 0)
+			temp = numpy.fromfile(
+				infile,
 				dtype = 'double, 3double, double, 3double, 3double, intc, intc, double',
-				count = 1,
-				offset = item[1])
+				count = 1
+			)[0]
 
 			data = MHD_Components(
 				c0 = cell_center[0],
